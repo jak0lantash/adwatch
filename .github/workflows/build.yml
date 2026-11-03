@@ -16,8 +16,12 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    outputs:
+      is_fork: ${{ steps.fork.outputs.is_fork }}
     steps:
       - uses: actions/checkout@v4
+      - id: fork
+        run: echo "is_fork=$([ -f fork/config.json ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -34,7 +38,7 @@ jobs:
 
   image:
     needs: test
-    if: hashFiles('fork/config.json') != ''
+    if: needs.test.outputs.is_fork == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
