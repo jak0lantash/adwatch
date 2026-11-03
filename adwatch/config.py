@@ -36,6 +36,7 @@ DEFAULTS = {
     "default_site": None,       # site id for ads migrated from a database without one
     # Fields an ad can have, besides the built-in ones (title, price, url, image, lat/lng, ...).
     #   key, label, type: text | int | decimal, decimals, unit, prefix
+    #   grouping: false -> no thousands separator (years)
     #   format: name of a formatter in the page (built-in: eur, km, ago; forks add more in fork.js)
     #   exclude: true -> thumbs-down button ("never show ads with this value")
     #   filter: range | min | max | contains -> optional refinement on each search

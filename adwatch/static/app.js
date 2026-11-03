@@ -45,7 +45,7 @@ function text(key, ad) {
   if (f.format === "eur") s = eur(v);
   else if (f.format === "ago") s = ago(v);
   else if (f.type === "decimal") s = Number(v).toFixed(f.decimals ?? 1);
-  else if (f.type === "int") s = Number(v).toLocaleString("en-IE");
+  else if (f.type === "int") s = f.grouping === false ? String(Math.round(Number(v))) : Number(v).toLocaleString("en-IE");
   else s = String(v);
   return (f.prefix || "") + s + (f.unit || "");
 }

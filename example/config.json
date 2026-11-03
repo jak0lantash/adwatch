@@ -7,7 +7,7 @@
   "fields": [
     {"key": "category", "label": "Category", "type": "text", "exclude": true, "filter": "contains"},
     {"key": "condition", "label": "Condition", "type": "text", "exclude": true},
-    {"key": "year", "label": "Year", "type": "int", "filter": "range"},
+    {"key": "year", "label": "Year", "type": "int", "grouping": false, "filter": "range"},
     {"key": "county", "label": "Location", "type": "text", "exclude": true}
   ],
   "card": {
