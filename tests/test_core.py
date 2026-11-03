@@ -5,10 +5,6 @@ import sqlite3
 import pytest
 
 from adwatch import config, db, fetcher, server, sites, throttle
-from adwatch.sites import Page, Site
-
-pytestmark = pytest.mark.skipif(config.fork_dir().endswith("fork") and not sites.get("example"),
-                                reason="core tests need the example site")
 
 
 @pytest.fixture
