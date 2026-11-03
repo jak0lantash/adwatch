@@ -1,0 +1,38 @@
+# In a fork: once a week, check whether the adwatch core has new commits and, if so, open
+# (or update) an issue listing them. Merge them with scripts/sync-upstream.sh.
+name: Core updates
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    if: github.repository != 'jak0lantash/adwatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compare with the core
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UPSTREAM: ${{ vars.ADWATCH_UPSTREAM || 'https://github.com/jak0lantash/adwatch' }}
+        run: |
+          git remote add upstream "$UPSTREAM"
+          git fetch -q upstream main
+          new=$(git log --oneline HEAD..upstream/main)
+          title="Core updates available"
+          existing=$(gh issue list --state open --search "in:title \"$title\"" --json number -q '.[0].number')
+          if [ -z "$new" ]; then
+            echo "Up to date with the core."
+            [ -n "$existing" ] && gh issue close "$existing" -c "Up to date with the core now."
+            exit 0
+          fi
+          body=$(printf 'The adwatch core has %s commit(s) not merged here yet:\n\n```\n%s\n```\n\nMerge them with `scripts/sync-upstream.sh`, check the tests pass, then push.' "$(echo "$new" | wc -l)" "$new")
+          if [ -n "$existing" ]; then gh issue edit "$existing" --body "$body"; else gh issue create --title "$title" --body "$body"; fi

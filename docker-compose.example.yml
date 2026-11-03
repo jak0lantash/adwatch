@@ -1,0 +1,16 @@
+# Run a fork on any Docker host: copy this to docker-compose.yml and set the image.
+services:
+  app:
+    image: ghcr.io/OWNER/REPO:sha-xxxxxxx   # built by .github/workflows/build.yml
+    restart: unless-stopped
+    init: true
+    shm_size: "1gb"        # only needed if a site is read in a browser (Chromium)
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/data       # database, photo cache, what the scraper saw
+    environment:
+      - TZ=Europe/Dublin
+      # - DEMO=1                   # made-up ads, nothing fetched
+      # - APP_PASSWORD=...         # basic login, if reachable from outside your home
+      # - MIN_GAP_SECONDS=20       # per site: <SITE>_MIN_GAP_SECONDS, _REFRESH_HOURS, _INTERVAL_HOURS, _MAX_PAGES, _MODE

@@ -1,0 +1,26 @@
+{
+  "id": "adwatch-example",
+  "name": "AdWatch",
+  "icon": "🔎",
+  "item": "ad", "items": "ads",
+  "share_title": "Ads I've saved",
+  "fields": [
+    {"key": "category", "label": "Category", "type": "text", "exclude": true, "filter": "contains"},
+    {"key": "condition", "label": "Condition", "type": "text", "exclude": true},
+    {"key": "year", "label": "Year", "type": "int", "filter": "range"},
+    {"key": "county", "label": "Location", "type": "text", "exclude": true}
+  ],
+  "card": {
+    "heading": "{title}",
+    "subtitle": "[{condition}] [{category}]",
+    "sticker": "[{year}]",
+    "rows": ["category", "condition", "year", "county", "distance", "searches", "first_seen"],
+    "list_meta": "[{condition}] · [{county}]",
+    "share": "{price} · {title}[ · {condition}][ · {county}]"
+  },
+  "compare": {"group": ["category"], "min": 3, "label": "[{category}] ads"},
+  "centre": {"name": "Cork", "lat": 51.8985, "lng": -8.4756},
+  "default_searches": [
+    {"name": "Bikes (example)", "url": "https://www.example.com/search?q=bike"}
+  ]
+}
