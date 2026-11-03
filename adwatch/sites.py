@@ -25,6 +25,9 @@ Modes:
   background  Every interval_hours, each search is read up to max_pages pages. Ads not seen
               for a while are treated as gone. For sites that don't mind.
 
+Helpers shared by several plug-ins go in fork/sites/_something.py (not loaded as a plug-in;
+import it with `import _something`).
+
 Optional extras: check_ad() to recheck saved ads, photo_hosts + fetch_photo() to serve photos
 that won't load on another site, session() to share an expensive setup (a browser) across
 the pages of one background run, search_matches() for site-specific result filtering,
@@ -151,7 +154,13 @@ def load():
     global _sites
     if _sites is None:
         found = {}
-        for path in sorted(glob.glob(os.path.join(config.fork_dir(), "sites", "*.py"))):
+        folder = os.path.join(config.fork_dir(), "sites")
+        # Helper modules shared by plug-ins: fork/sites/_name.py, imported as `import _name`.
+        if folder not in sys.path:
+            sys.path.insert(0, folder)
+        for path in sorted(glob.glob(os.path.join(folder, "*.py"))):
+            if os.path.basename(path).startswith("_"):
+                continue
             name = "fork_sites_" + os.path.basename(path)[:-3]
             spec = importlib.util.spec_from_file_location(name, path)
             mod = importlib.util.module_from_spec(spec)
