@@ -36,6 +36,7 @@ import importlib.util
 import inspect
 import logging
 import os
+import sys
 from urllib.parse import urlparse
 
 from . import config, http
@@ -154,6 +155,7 @@ def load():
             name = "fork_sites_" + os.path.basename(path)[:-3]
             spec = importlib.util.spec_from_file_location(name, path)
             mod = importlib.util.module_from_spec(spec)
+            sys.modules[name] = mod   # importable as fork_sites_<file> (tests, shared helpers)
             spec.loader.exec_module(mod)
             for _, cls in inspect.getmembers(mod, inspect.isclass):
                 if issubclass(cls, Site) and cls is not Site and cls.id and cls.__module__ == name:
